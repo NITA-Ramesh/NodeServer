@@ -13,6 +13,7 @@ var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 var passport = require('passport');
 var authenticate = require('./authenticate');
+var config = require('./config');
 
 var app = express();
 
@@ -63,7 +64,7 @@ const mongoose = require('mongoose');
 
 const Dishes = require('./models/dishes');
 
-const url = 'mongodb+srv://admin:admin123@cluster0.q7nmi.mongodb.net/conFusion';
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
