@@ -7,6 +7,7 @@ var authenticate = require('../authenticate');
 var router = express.Router();
 router.use(bodyParser.json());
 
+
 router.post('/signup', (req, res, next) => {
   User.register(new User({username: req.body.username}), 
     req.body.password, (err, user) => {
@@ -27,7 +28,8 @@ router.post('/signup', (req, res, next) => {
           res.json({err: err});
           return ;
         }
-        passport.authenticate('local')(req, res, () => {
+        passport.authenticate('local')(req, res, () =>
+        {
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');
           res.json({success: true, status: 'Registration Successful!'});
@@ -56,6 +58,24 @@ router.get('/logout', (req, res) => {
     err.status = 403;
     next(err);
   }
+});
+router.get('/',authenticate.verifyUser,authenticate.verifyAdmin,(req, res) => {
+  User.find({},(err,data)=>{
+    if(err)
+    { 
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.json({err: err});
+      return ;
+    }
+    else
+    {
+      res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json');
+  res.json(data);
+    }
+  })
+  
 });
 
 module.exports = router;
